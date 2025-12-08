@@ -7,8 +7,15 @@ function Summary({ expenses, onDeleteAll }) {
         }).format(amount);
     };
 
-    const totalExpenses = expenses.reduce((sum, expense) => sum + expense.total, 0);
-    const transactionCount = expenses.length;
+    const totalIncome = expenses
+        .filter(t => t.type === 'income')
+        .reduce((sum, t) => sum + (Number(t.amount) || 0), 0);
+
+    const totalExpense = expenses
+        .filter(t => t.type === 'expense' || !t.type) // Handle legacy/default as expense
+        .reduce((sum, t) => sum + (Number(t.amount) || 0), 0);
+
+    const balance = totalIncome - totalExpense;
 
     const handleDeleteAll = () => {
         const confirmed = window.confirm('Yakin ingin menghapus semua data pengeluaran?');
@@ -18,36 +25,62 @@ function Summary({ expenses, onDeleteAll }) {
     };
 
     return (
-        <div className="space-y-4">
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <div className="bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 border border-blue-200 dark:border-blue-800/50 rounded-xl p-5 text-center">
-                    <div className="text-xs font-medium text-gray-600 dark:text-gray-400 mb-1.5 uppercase tracking-wide">
-                        Total Pengeluaran
+        <div className="space-y-6">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                {/* Income Card */}
+                <div className="bg-gradient-to-br from-green-50 to-emerald-50 dark:from-green-900/20 dark:to-emerald-900/20 border border-green-200 dark:border-green-800/50 rounded-2xl p-6 relative overflow-hidden group">
+                    <div className="absolute right-0 top-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
+                        <span className="text-6xl">💰</span>
                     </div>
-                    <div className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 dark:from-blue-400 dark:to-indigo-400 bg-clip-text text-transparent">
-                        {formatCurrency(totalExpenses)}
+                    <div className="text-sm font-semibold text-green-700 dark:text-green-400 mb-2 uppercase tracking-wide">
+                        Pemasukkan
+                    </div>
+                    <div className="text-2xl sm:text-3xl font-bold text-green-700 dark:text-green-400">
+                        {formatCurrency(totalIncome)}
                     </div>
                 </div>
 
-                <div className="bg-gradient-to-br from-purple-50 to-pink-50 dark:from-purple-900/20 dark:to-pink-900/20 border border-purple-200 dark:border-purple-800/50 rounded-xl p-5 text-center">
-                    <div className="text-xs font-medium text-gray-600 dark:text-gray-400 mb-1.5 uppercase tracking-wide">
-                        Jumlah Transaksi
+                {/* Expense Card */}
+                <div className="bg-gradient-to-br from-red-50 to-pink-50 dark:from-red-900/20 dark:to-pink-900/20 border border-red-200 dark:border-red-800/50 rounded-2xl p-6 relative overflow-hidden group">
+                    <div className="absolute right-0 top-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
+                        <span className="text-6xl">💸</span>
                     </div>
-                    <div className="text-2xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 dark:from-purple-400 dark:to-pink-400 bg-clip-text text-transparent">
-                        {transactionCount}
+                    <div className="text-sm font-semibold text-red-700 dark:text-red-400 mb-2 uppercase tracking-wide">
+                        Pengeluaran
+                    </div>
+                    <div className="text-2xl sm:text-3xl font-bold text-red-700 dark:text-red-400">
+                        {formatCurrency(totalExpense)}
+                    </div>
+                </div>
+
+                {/* Balance Card */}
+                <div className="bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 border border-blue-200 dark:border-blue-800/50 rounded-2xl p-6 relative overflow-hidden group">
+                    <div className="absolute right-0 top-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
+                        <span className="text-6xl">⚖️</span>
+                    </div>
+                    <div className="text-sm font-semibold text-blue-700 dark:text-blue-400 mb-2 uppercase tracking-wide">
+                        Sisa Saldo
+                    </div>
+                    <div className={`text-2xl sm:text-3xl font-bold ${balance >= 0 ? 'text-blue-700 dark:text-blue-400' : 'text-red-600 dark:text-red-400'}`}>
+                        {formatCurrency(balance)}
                     </div>
                 </div>
             </div>
 
-            {expenses.length > 0 && (
-                <button
-                    onClick={handleDeleteAll}
-                    className="w-full sm:w-auto px-5 py-2.5 bg-red-600 hover:bg-red-700 dark:bg-red-500 dark:hover:bg-red-600 text-white font-medium rounded-lg shadow-md hover:shadow-lg transform hover:-translate-y-0.5 transition-all duration-200 flex items-center justify-center gap-2 text-sm"
-                >
-                    <span>🗑️</span>
-                    Hapus Semua Data
-                </button>
-            )}
+            {/* Delete All & Count Information */}
+            <div className="flex justify-between items-center text-sm text-gray-500 dark:text-gray-400 px-2">
+                <div>
+                    Total Transaksi: <span className="font-semibold">{expenses.length}</span>
+                </div>
+                {expenses.length > 0 && (
+                    <button
+                        onClick={handleDeleteAll}
+                        className="text-red-500 hover:text-red-700 dark:text-red-400 dark:hover:text-red-300 font-medium transition-colors flex items-center gap-1"
+                    >
+                        🗑️ Hapus Semua
+                    </button>
+                )}
+            </div>
         </div>
     );
 }
