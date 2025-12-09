@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { supabase } from '../lib/supaClient';
+import Swal from 'sweetalert2';
 
 function Auth() {
     const [loading, setLoading] = useState(false);
@@ -19,10 +20,18 @@ function Auth() {
             if (error) throw error;
 
             if (!isLogin) {
-                alert('Registrasi berhasil! Silakan cek email Anda untuk verifikasi atau login langsung jika tidak perlu verifikasi.');
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Registrasi Berhasil',
+                    text: 'Silakan cek email Anda untuk verifikasi atau login langsung jika tidak perlu verifikasi.',
+                });
             }
         } catch (error) {
-            alert(error.error_description || error.message);
+            Swal.fire({
+                icon: 'error',
+                title: 'Gagal',
+                text: error.error_description || error.message,
+            });
         } finally {
             setLoading(false);
         }

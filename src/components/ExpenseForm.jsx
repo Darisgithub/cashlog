@@ -1,29 +1,18 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
+import { TrendingDown, TrendingUp, HandCoins, Wallet } from 'lucide-react';
 
-function ExpenseForm({ onAddExpense, editData, onUpdateExpense }) {
+function ExpenseForm({ onAddExpense }) {
     const [formData, setFormData] = useState({
         tanggal: new Date().toISOString().split('T')[0],
         jenis: '',
         total: '',
-        type: 'expense' // 'expense' or 'income'
+        type: 'expense'
     });
-
-    useEffect(() => {
-        if (editData) {
-            setFormData({
-                tanggal: editData.date || editData.tanggal,
-                jenis: editData.description || editData.jenis,
-                total: editData.amount || editData.total,
-                type: editData.type || 'expense'
-            });
-        }
-    }, [editData]);
 
     const handleSubmit = (e) => {
         e.preventDefault();
 
         if (!formData.tanggal || !formData.jenis || !formData.total) {
-            alert('Mohon isi semua field!');
             return;
         }
 
@@ -34,20 +23,14 @@ function ExpenseForm({ onAddExpense, editData, onUpdateExpense }) {
             type: formData.type
         };
 
-        if (editData) {
-            onUpdateExpense({ ...expense, id: editData.id });
-        } else {
-            onAddExpense(expense);
-        }
+        onAddExpense(expense);
 
-        if (!editData) {
-            setFormData({
-                tanggal: new Date().toISOString().split('T')[0],
-                jenis: '',
-                total: '',
-                type: 'expense' // reset to default
-            });
-        }
+        setFormData({
+            tanggal: new Date().toISOString().split('T')[0],
+            jenis: '',
+            total: '',
+            type: 'expense'
+        });
     };
 
     const handleChange = (e) => {
@@ -57,27 +40,10 @@ function ExpenseForm({ onAddExpense, editData, onUpdateExpense }) {
         });
     };
 
-    const handleCancelEdit = () => {
-        onUpdateExpense(null); // Clear edit state in parent
-        setFormData({
-            tanggal: new Date().toISOString().split('T')[0],
-            jenis: '',
-            total: '',
-            type: 'expense'
-        });
-    }
-
     return (
         <form onSubmit={handleSubmit} className="space-y-6">
             {/* Type Selector */}
-            <div className="grid grid-cols-2 gap-4 p-1 bg-gray-100 dark:bg-gray-900 rounded-xl relative">
-                {editData && (
-                    <div className="absolute -top-3 -right-3">
-                        <span className="bg-yellow-100 text-yellow-800 text-xs px-2 py-1 rounded-full border border-yellow-200 shadow-sm animate-pulse">
-                            Editing Mode
-                        </span>
-                    </div>
-                )}
+            <div className="grid grid-cols-2 gap-4 p-1 bg-gray-100 dark:bg-gray-900 rounded-xl">
                 <button
                     type="button"
                     onClick={() => setFormData({ ...formData, type: 'expense' })}
@@ -86,7 +52,8 @@ function ExpenseForm({ onAddExpense, editData, onUpdateExpense }) {
                         : 'text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200'
                         }`}
                 >
-                    💸 Pengeluaran
+                    <TrendingDown size={18} />
+                    Pengeluaran
                 </button>
                 <button
                     type="button"
@@ -96,7 +63,8 @@ function ExpenseForm({ onAddExpense, editData, onUpdateExpense }) {
                         : 'text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200'
                         }`}
                 >
-                    💰 Pemasukkan
+                    <TrendingUp size={18} />
+                    Pemasukkan
                 </button>
             </div>
 
@@ -153,30 +121,12 @@ function ExpenseForm({ onAddExpense, editData, onUpdateExpense }) {
                 </div>
             </div>
 
-            <div className="flex gap-3">
-                <button
-                    type="submit"
-                    className={`flex-1 py-4 text-white font-bold rounded-xl shadow-lg transform hover:-translate-y-1 transition-all duration-300 flex items-center justify-center gap-2 text-base ${editData
-                        ? 'bg-yellow-500 hover:bg-yellow-600 shadow-yellow-500/30'
-                        : (formData.type === 'expense'
-                            ? 'bg-gradient-to-r from-red-600 to-pink-600 shadow-red-500/30'
-                            : 'bg-gradient-to-r from-green-600 to-emerald-600 shadow-green-500/30')
-                        }`}
-                >
-                    <span>{editData ? '✏️' : (formData.type === 'expense' ? '💸' : '💰')}</span>
-                    {editData ? 'Update Transaksi' : (formData.type === 'expense' ? 'Catat Pengeluaran' : 'Catat Pemasukkan')}
-                </button>
-
-                {editData && (
-                    <button
-                        type="button"
-                        onClick={handleCancelEdit}
-                        className="px-6 py-4 bg-gray-200 hover:bg-gray-300 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-300 font-bold rounded-xl transition-all"
-                    >
-                        Batal
-                    </button>
-                )}
-            </div>
+            <button
+                type="submit"
+                className="w-full py-3 rounded-xl bg-blue-600 text-white font-medium text-sm transition-all duration-300 hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600"
+            >
+                Tambah
+            </button>
         </form>
     );
 }

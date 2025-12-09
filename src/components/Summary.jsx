@@ -1,3 +1,5 @@
+import { Wallet, TrendingDown, TrendingUp, Scale, Trash2 } from 'lucide-react';
+
 function Summary({ expenses, onDeleteAll }) {
     const formatCurrency = (amount) => {
         return new Intl.NumberFormat('id-ID', {
@@ -18,10 +20,7 @@ function Summary({ expenses, onDeleteAll }) {
     const balance = totalIncome - totalExpense;
 
     const handleDeleteAll = () => {
-        const confirmed = window.confirm('Yakin ingin menghapus semua data pengeluaran?');
-        if (confirmed) {
-            onDeleteAll();
-        }
+        onDeleteAll();
     };
 
     return (
@@ -30,12 +29,13 @@ function Summary({ expenses, onDeleteAll }) {
                 {/* Income Card */}
                 <div className="bg-gradient-to-br from-green-50 to-emerald-50 dark:from-green-900/20 dark:to-emerald-900/20 border border-green-200 dark:border-green-800/50 rounded-2xl p-6 relative overflow-hidden group">
                     <div className="absolute right-0 top-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
-                        <span className="text-6xl">💰</span>
+                        <TrendingUp size={64} />
                     </div>
-                    <div className="text-sm font-semibold text-green-700 dark:text-green-400 mb-2 uppercase tracking-wide">
+                    <div className="text-sm font-semibold text-green-700 dark:text-green-400 mb-2 uppercase tracking-wide flex items-center gap-2">
+                        <TrendingUp size={16} />
                         Pemasukkan
                     </div>
-                    <div className="text-2xl sm:text-3xl font-bold text-green-700 dark:text-green-400">
+                    <div className="text-xl sm:text-2xl font-bold text-green-700 dark:text-green-400 truncate whitespace-nowrap" title={formatCurrency(totalIncome)}>
                         {formatCurrency(totalIncome)}
                     </div>
                 </div>
@@ -43,12 +43,13 @@ function Summary({ expenses, onDeleteAll }) {
                 {/* Expense Card */}
                 <div className="bg-gradient-to-br from-red-50 to-pink-50 dark:from-red-900/20 dark:to-pink-900/20 border border-red-200 dark:border-red-800/50 rounded-2xl p-6 relative overflow-hidden group">
                     <div className="absolute right-0 top-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
-                        <span className="text-6xl">💸</span>
+                        <TrendingDown size={64} />
                     </div>
-                    <div className="text-sm font-semibold text-red-700 dark:text-red-400 mb-2 uppercase tracking-wide">
+                    <div className="text-sm font-semibold text-red-700 dark:text-red-400 mb-2 uppercase tracking-wide flex items-center gap-2">
+                        <TrendingDown size={16} />
                         Pengeluaran
                     </div>
-                    <div className="text-2xl sm:text-3xl font-bold text-red-700 dark:text-red-400">
+                    <div className="text-xl sm:text-2xl font-bold text-red-700 dark:text-red-400 truncate whitespace-nowrap" title={formatCurrency(totalExpense)}>
                         {formatCurrency(totalExpense)}
                     </div>
                 </div>
@@ -56,12 +57,13 @@ function Summary({ expenses, onDeleteAll }) {
                 {/* Balance Card */}
                 <div className="bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 border border-blue-200 dark:border-blue-800/50 rounded-2xl p-6 relative overflow-hidden group">
                     <div className="absolute right-0 top-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
-                        <span className="text-6xl">⚖️</span>
+                        <Scale size={64} />
                     </div>
-                    <div className="text-sm font-semibold text-blue-700 dark:text-blue-400 mb-2 uppercase tracking-wide">
+                    <div className="text-sm font-semibold text-blue-700 dark:text-blue-400 mb-2 uppercase tracking-wide flex items-center gap-2">
+                        <Wallet size={16} />
                         Sisa Saldo
                     </div>
-                    <div className={`text-2xl sm:text-3xl font-bold ${balance >= 0 ? 'text-blue-700 dark:text-blue-400' : 'text-red-600 dark:text-red-400'}`}>
+                    <div className={`text-xl sm:text-2xl font-bold ${balance >= 0 ? 'text-blue-700 dark:text-blue-400' : 'text-red-600 dark:text-red-400'} truncate whitespace-nowrap`} title={formatCurrency(balance)}>
                         {formatCurrency(balance)}
                     </div>
                 </div>
@@ -77,7 +79,7 @@ function Summary({ expenses, onDeleteAll }) {
                         onClick={handleDeleteAll}
                         className="text-red-500 hover:text-red-700 dark:text-red-400 dark:hover:text-red-300 font-medium transition-colors flex items-center gap-1"
                     >
-                        🗑️ Hapus Semua
+                        <Trash2 size={16} /> Hapus Semua
                     </button>
                 )}
             </div>

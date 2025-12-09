@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { Calendar } from 'lucide-react';
 
 function FilterBar({ customDateRange, onCustomDateChange }) {
     const handleDateChange = (type, value) => {
@@ -13,7 +14,8 @@ function FilterBar({ customDateRange, onCustomDateChange }) {
         <div className="p-4 bg-white/50 dark:bg-gray-800/50 border border-gray-200 dark:border-gray-700/50 rounded-xl backdrop-blur-sm">
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div className="flex flex-col gap-2">
-                    <label htmlFor="startDate" className="text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-400">
+                    <label htmlFor="startDate" className="text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-400 flex items-center gap-1">
+                        <Calendar size={14} />
                         Dari Tanggal
                     </label>
                     <input
@@ -25,7 +27,8 @@ function FilterBar({ customDateRange, onCustomDateChange }) {
                     />
                 </div>
                 <div className="flex flex-col gap-2">
-                    <label htmlFor="endDate" className="text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-400">
+                    <label htmlFor="endDate" className="text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-400 flex items-center gap-1">
+                        <Calendar size={14} />
                         Sampai Tanggal
                     </label>
                     <input
