@@ -6,6 +6,7 @@ import ThemeToggle from './components/ThemeToggle';
 import FilterBar from './components/FilterBar';
 import Auth from './components/Auth';
 import TodoList from './components/TodoList';
+import InstallCTA from './components/InstallCTA';
 import { supabase } from './lib/supaClient';
 import Swal from 'sweetalert2';
 import { LogOut, LayoutDashboard, PlusCircle, History } from 'lucide-react';
@@ -296,7 +297,7 @@ function App() {
         <main className="space-y-8 max-w-3xl mx-auto">
           {/* Section 1: Form Input */}
           <section className="bg-white dark:bg-gray-800 rounded-3xl p-6 sm:p-8 shadow-sm border border-gray-100 dark:border-gray-700/50 relative overflow-hidden">
-            <div className="absolute top-0 right-0 p-6 opacity-5 rotate-12">
+            <div className="absolute top-0 right-0 p-6 opacity-5 rotate-12 pointer-events-none">
               <PlusCircle size={120} />
             </div>
             <h2 className="text-xl font-bold text-gray-800 dark:text-gray-100 mb-6 relative z-10 flex items-center gap-2">
@@ -355,6 +356,7 @@ function App() {
           </p>
         </footer>
       </div>
+      <InstallCTA />
     </div>
   );
 }
