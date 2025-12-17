@@ -5,9 +5,19 @@
 @tailwind utilities;
 
 @layer base {
+
+  html,
+  body {
+    height: 100%;
+    overscroll-behavior: none;
+    /* Prevent rubber-banding */
+  }
+
   body {
     font-family: 'Inter', sans-serif;
     @apply min-h-screen;
+    /* Use dynamic viewport height for mobile */
+    min-height: 100dvh;
   }
 }
 
@@ -30,67 +40,46 @@
   .scrollbar-thin::-webkit-scrollbar-thumb:hover {
     @apply bg-gray-400 dark:bg-gray-500;
   }
+}
 
-  /* Animation Utilities */
-  .animate-blob {
-    animation: blob 7s infinite;
-  }
+/* NUCLEAR OPTION: Force disable SweetAlert2 Animations & FIXED POSITIONING */
 
-  .animation-delay-2000 {
-    animation-delay: 2s;
-  }
+/* 1. Reset Body/HTML Height Behavior Overrides from SweetAlert2 */
+body.swal2-height-auto,
+html.swal2-height-auto {
+  height: 100% !important;
+  min-height: 100dvh !important;
+}
 
-  .animation-delay-1000 {
-    animation-delay: 1s;
-  }
+/* 2. Disable all animations and transforms */
+div.swal2-popup {
+  animation: none !important;
+  transition: none !important;
+  transform: scale(1) !important;
+  display: grid !important;
+  resize: none !important;
+}
 
-  .animation-delay-3000 {
-    animation-delay: 3s;
-  }
+/* 3. Anchor container to top to prevent keyboard jump */
+div.swal2-container {
+  transition: none !important;
+  align-items: flex-start !important;
+  /* Anchor to top */
+  padding-top: 20px !important;
+  /* Safety margin */
+  overflow-y: auto !important;
+}
 
-  .animation-delay-4000 {
-    animation-delay: 4s;
-  }
+/* 4. Disable backdrop animations */
+div.swal2-backdrop-show {
+  animation: none !important;
+}
 
-  @keyframes blob {
-    0% {
-      transform: translate(0px, 0px) scale(1);
-    }
+div.swal2-backdrop-hide {
+  animation: none !important;
+}
 
-    33% {
-      transform: translate(30px, -50px) scale(1.1);
-    }
-
-    66% {
-      transform: translate(-20px, 20px) scale(0.9);
-    }
-
-    100% {
-      transform: translate(0px, 0px) scale(1);
-    }
-  }
-
-  .animate-float-up {
-    animation: float-up 15s linear infinite;
-  }
-
-  @keyframes float-up {
-    0% {
-      transform: translateY(120vh) rotate(0deg);
-      opacity: 0;
-    }
-
-    10% {
-      opacity: 0.2;
-    }
-
-    90% {
-      opacity: 0.2;
-    }
-
-    100% {
-      transform: translateY(-20vh) rotate(360deg);
-      opacity: 0;
-    }
-  }
+/* 5. Disable textarea resizing */
+textarea.swal2-textarea {
+  resize: none !important;
 }

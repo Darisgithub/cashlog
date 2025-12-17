@@ -96,6 +96,10 @@ function TodoList({ session }) {
             title: 'Edit Tugas',
             input: 'textarea',
             inputValue: task.task,
+            showClass: { popup: '', backdrop: '' },
+            hideClass: { popup: '', backdrop: '' },
+            heightAuto: false,
+            scrollbarPadding: false,
             showCancelButton: true,
             confirmButtonText: 'Simpan',
             cancelButtonText: 'Batal',
@@ -240,7 +244,7 @@ function TodoList({ session }) {
                     }).map(task => (
                         <div
                             key={task.id}
-                            className={`group flex items-start gap-3 p-3 rounded-xl transition-all duration-200 border ${task.is_completed
+                            className={`group flex items-start gap-3 p-3 rounded-xl border ${task.is_completed
                                 ? 'bg-gray-50 dark:bg-gray-800/50 border-transparent opacity-60'
                                 : 'bg-white dark:bg-gray-800 border-gray-100 dark:border-gray-700 hover:border-indigo-200 dark:hover:border-indigo-800'
                                 }`}

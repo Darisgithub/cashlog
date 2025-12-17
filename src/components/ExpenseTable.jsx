@@ -114,7 +114,12 @@ function ExpenseTable({ expenses, onDeleteExpense, onUpdate }) {
                         <input id="swal-amount" type="number" class="w-full px-3 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 outline-none transition-colors" value="${expense.amount || expense.total}">
                     </div>
                 </div>
+                </div>
             `,
+            showClass: { popup: '', backdrop: '' },
+            hideClass: { popup: '', backdrop: '' },
+            heightAuto: false,
+            scrollbarPadding: false,
             showCancelButton: true,
             confirmButtonText: 'Simpan',
             cancelButtonText: 'Batal',
@@ -177,10 +182,10 @@ function ExpenseTable({ expenses, onDeleteExpense, onUpdate }) {
                 </button>
             </div>
 
-            <div className="-mx-6 sm:mx-0 overflow-x-auto scrollbar-hide sm:scrollbar-thin rounded-none sm:rounded-xl border-y sm:border border-gray-200 dark:border-gray-700">
+            <div className="-mx-6 sm:mx-0 overflow-auto max-h-[400px] scrollbar-thin pr-2 rounded-none sm:rounded-xl border-y sm:border border-gray-200 dark:border-gray-700 relative">
                 <table className="w-full text-sm table-fixed min-w-[650px]">
                     <thead>
-                        <tr className="bg-gray-50/50 dark:bg-gray-700/30 text-xs uppercase tracking-wider border-b border-gray-200 dark:border-gray-600">
+                        <tr className="sticky top-0 z-20 bg-gray-100 dark:bg-gray-800 text-xs uppercase tracking-wider border-b border-gray-200 dark:border-gray-600 shadow-sm">
                             <th className="px-2 sm:px-4 py-3 text-left font-semibold text-gray-700 dark:text-gray-300 whitespace-nowrap w-[15%]">
                                 Tanggal
                             </th>
@@ -202,7 +207,7 @@ function ExpenseTable({ expenses, onDeleteExpense, onUpdate }) {
                         {expenses.map((expense) => (
                             <tr
                                 key={expense.id}
-                                className="hover:bg-gray-50 dark:hover:bg-gray-700/20 transition-colors duration-150 group"
+                                className="hover:bg-gray-50 dark:hover:bg-gray-700/20 group"
                             >
                                 <td className="px-2 sm:px-4 py-3 text-gray-700 dark:text-gray-300 whitespace-nowrap font-medium align-middle">
                                     {formatDate(expense.date || expense.tanggal)}
@@ -229,14 +234,14 @@ function ExpenseTable({ expenses, onDeleteExpense, onUpdate }) {
                                         <button
                                             onClick={() => handleEditClick(expense)}
                                             title="Edit"
-                                            className="p-1.5 rounded-md text-blue-500 hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-all"
+                                            className="p-1.5 rounded-md text-blue-500 hover:bg-blue-50 dark:hover:bg-blue-900/20"
                                         >
                                             <Pencil size={16} />
                                         </button>
                                         <button
                                             onClick={() => onDeleteExpense(expense.id)}
                                             title="Hapus"
-                                            className="p-1.5 rounded-md text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 transition-all"
+                                            className="p-1.5 rounded-md text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20"
                                         >
                                             <Trash2 size={16} />
                                         </button>
