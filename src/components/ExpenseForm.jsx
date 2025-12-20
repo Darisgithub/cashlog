@@ -6,7 +6,8 @@ function ExpenseForm({ onAddExpense }) {
         tanggal: new Date().toISOString().split('T')[0],
         jenis: '',
         total: '',
-        type: 'expense'
+        type: 'expense',
+        paymentMethod: 'cash'
     });
 
     const handleSubmit = (e) => {
@@ -20,7 +21,8 @@ function ExpenseForm({ onAddExpense }) {
             date: formData.tanggal,
             description: formData.jenis,
             amount: parseFloat(formData.total),
-            type: formData.type
+            type: formData.type,
+            payment_method: formData.paymentMethod
         };
 
         onAddExpense(expense);
@@ -29,7 +31,8 @@ function ExpenseForm({ onAddExpense }) {
             tanggal: new Date().toISOString().split('T')[0],
             jenis: '',
             total: '',
-            type: 'expense'
+            type: 'expense',
+            paymentMethod: 'cash'
         });
     };
 
@@ -65,6 +68,32 @@ function ExpenseForm({ onAddExpense }) {
                 >
                     <TrendingUp size={18} />
                     Pemasukkan
+                </button>
+            </div>
+
+            {/* Payment Method Selector */}
+            <div className="grid grid-cols-2 gap-4 p-1 bg-gray-100 dark:bg-gray-900 rounded-xl">
+                <button
+                    type="button"
+                    onClick={() => setFormData({ ...formData, paymentMethod: 'cash' })}
+                    className={`py-3 rounded-lg font-medium text-sm transition-all duration-300 flex items-center justify-center gap-2 ${formData.paymentMethod === 'cash'
+                        ? 'bg-blue-600 text-white shadow-lg shadow-blue-500/30'
+                        : 'text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200'
+                        }`}
+                >
+                    <Wallet size={18} />
+                    Tunai
+                </button>
+                <button
+                    type="button"
+                    onClick={() => setFormData({ ...formData, paymentMethod: 'digital' })}
+                    className={`py-3 rounded-lg font-medium text-sm transition-all duration-300 flex items-center justify-center gap-2 ${formData.paymentMethod === 'digital'
+                        ? 'bg-purple-600 text-white shadow-lg shadow-purple-500/30'
+                        : 'text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200'
+                        }`}
+                >
+                    <HandCoins size={18} />
+                    Digital
                 </button>
             </div>
 

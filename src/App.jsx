@@ -82,18 +82,33 @@ function App() {
     setTheme(prev => prev === 'dark' ? 'light' : 'dark');
   };
 
+  const [paymentMethodFilter, setPaymentMethodFilter] = useState('all');
+
   const filteredExpenses = useMemo(() => {
-    if (!customDateRange.start && !customDateRange.end) return expenses;
+    let result = expenses;
 
-    const start = customDateRange.start ? new Date(customDateRange.start) : new Date(0);
-    const end = customDateRange.end ? new Date(customDateRange.end) : new Date();
-    end.setHours(23, 59, 59, 999);
+    // Filter by Date
+    if (customDateRange.start || customDateRange.end) {
+      const start = customDateRange.start ? new Date(customDateRange.start) : new Date(0);
+      const end = customDateRange.end ? new Date(customDateRange.end) : new Date();
+      end.setHours(23, 59, 59, 999);
 
-    return expenses.filter(expense => {
-      const expenseDate = new Date(expense.date || expense.tanggal);
-      return expenseDate >= start && expenseDate <= end;
-    });
-  }, [expenses, customDateRange]);
+      result = result.filter(expense => {
+        const expenseDate = new Date(expense.date || expense.tanggal);
+        return expenseDate >= start && expenseDate <= end;
+      });
+    }
+
+    // Filter by Payment Method
+    if (paymentMethodFilter !== 'all') {
+      result = result.filter(expense => {
+        const method = expense.payment_method || 'cash'; // Default to cash for legacy data
+        return method === paymentMethodFilter;
+      });
+    }
+
+    return result;
+  }, [expenses, customDateRange, paymentMethodFilter]);
 
   const handleAddExpense = async (expense) => {
     try {
@@ -104,6 +119,7 @@ function App() {
           description: expense.description,
           amount: expense.amount,
           type: expense.type,
+          payment_method: expense.payment_method,
           user_id: session.user.id
         }])
         .select();
@@ -133,7 +149,8 @@ function App() {
           date: updatedExpense.date,
           description: updatedExpense.description,
           amount: updatedExpense.amount,
-          type: updatedExpense.type
+          type: updatedExpense.type,
+          payment_method: updatedExpense.payment_method
         })
         .eq('id', updatedExpense.id);
 
@@ -318,6 +335,8 @@ function App() {
               <FilterBar
                 customDateRange={customDateRange}
                 onCustomDateChange={setCustomDateRange}
+                paymentMethod={paymentMethodFilter}
+                onPaymentMethodChange={setPaymentMethodFilter}
               />
             </div>
 

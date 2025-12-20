@@ -1,7 +1,7 @@
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
 import Swal from 'sweetalert2';
-import { Pencil, Trash2, FileDown, Inbox } from 'lucide-react';
+import { Pencil, Trash2, FileDown, Inbox, Wallet, HandCoins } from 'lucide-react';
 
 function ExpenseTable({ expenses, onDeleteExpense, onUpdate }) {
     const formatCurrency = (amount) => {
@@ -106,6 +106,13 @@ function ExpenseTable({ expenses, onDeleteExpense, onUpdate }) {
                         </select>
                     </div>
                     <div>
+                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Metode Pembayaran</label>
+                        <select id="swal-method" class="w-full px-3 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 outline-none transition-colors">
+                            <option value="cash" ${(!expense.payment_method || expense.payment_method === 'cash') ? 'selected' : ''}>Tunai</option>
+                            <option value="digital" ${expense.payment_method === 'digital' ? 'selected' : ''}>Digital</option>
+                        </select>
+                    </div>
+                    <div>
                         <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Keterangan</label>
                         <input id="swal-desc" type="text" class="w-full px-3 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 outline-none transition-colors" value="${expense.description || expense.jenis}">
                     </div>
@@ -132,6 +139,7 @@ function ExpenseTable({ expenses, onDeleteExpense, onUpdate }) {
             preConfirm: () => {
                 const date = document.getElementById('swal-date').value;
                 const type = document.getElementById('swal-type').value;
+                const method = document.getElementById('swal-method').value;
                 const description = document.getElementById('swal-desc').value;
                 const amount = document.getElementById('swal-amount').value;
 
@@ -144,6 +152,7 @@ function ExpenseTable({ expenses, onDeleteExpense, onUpdate }) {
                     id: expense.id,
                     date,
                     type,
+                    payment_method: method,
                     description,
                     amount: parseFloat(amount)
                 };
@@ -210,7 +219,14 @@ function ExpenseTable({ expenses, onDeleteExpense, onUpdate }) {
                                 className="hover:bg-gray-50 dark:hover:bg-gray-700/20 group"
                             >
                                 <td className="px-2 sm:px-4 py-3 text-gray-700 dark:text-gray-300 whitespace-nowrap font-medium align-middle">
-                                    {formatDate(expense.date || expense.tanggal)}
+                                    <div className="flex items-center gap-2">
+                                        {(!expense.payment_method || expense.payment_method === 'cash') ? (
+                                            <Wallet size={16} className="text-gray-400" title="Tunai" />
+                                        ) : (
+                                            <HandCoins size={16} className="text-purple-400" title="Digital" />
+                                        )}
+                                        {formatDate(expense.date || expense.tanggal)}
+                                    </div>
                                 </td>
                                 <td className="px-2 sm:px-4 py-3 align-middle">
                                     <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${expense.type === 'income'
